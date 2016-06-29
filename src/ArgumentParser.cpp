@@ -5,7 +5,8 @@ using namespace std;
 
 ArgumentParser::ArgumentParser() : desc("Allowed options") {
     // Add positional arguments to specify source, target and output database locations.
-    positionalOptions.add("input_db", 1); 
+    positionalOptions.add("source_db", 1); 
+    positionalOptions.add("target_db", 1); 
     positionalOptions.add("output_db", 1); 
 
     // Add optional arguments to allow control over application settings from the command line.

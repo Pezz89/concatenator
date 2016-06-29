@@ -1,11 +1,11 @@
 #include <iostream>
 #include "ArgumentParser.h"
+#include "AudioDatabase.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
 
-    // Declare the supported options.
     ArgumentParser argparse = ArgumentParser();
     argparse.parseargs(argc, argv);
     cout << "Hello world!" << endl;
