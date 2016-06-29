@@ -1,13 +1,14 @@
-#include "argument_parser.h"
+#include "ArgumentParser.h"
 #include <iostream>
 
 using namespace std;
 
 ArgumentParser::ArgumentParser() : desc("Allowed options") {
+    // Add positional arguments to specify source, target and output database locations.
     positionalOptions.add("input_db", 1); 
     positionalOptions.add("output_db", 1); 
 
-    
+    // Add optional arguments to allow control over application settings from the command line.
     desc.add_options()
         ("help,h", "produce help message")
         ("compression", po::value<int>(), "set compression level")
