@@ -2,7 +2,8 @@
 #include <boost/log/sinks.hpp>
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/expressions.hpp>
-#include <boost/utility/empty_deleter.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/core/null_deleter.hpp>
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 
@@ -15,8 +16,16 @@ BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", int)
 Logger::Logger() {
     Logger::sink = boost::make_shared<text_sink>();
 
-    boost::shared_ptr<std::ostream> stream{&std::clog, boost::empty_deleter{}};
-    Logger::sink->locked_backend()->add_stream(stream);
+    boost::shared_ptr<std::ostream> stdout_stream{&std::clog, boost::null_deleter{}};
+    Logger::sink->locked_backend()->add_stream(stdout_stream);
+
+    add_file_log
+    (
+        keywords::file_name = "sample_%N.log",
+        keywords::rotation_size = 10 * 1024 * 1024,
+        keywords::format = "[%(asctime)s] [%(levelname)8s] --- %(message)s (%(filename)s:%(lineno)s) %Y-%m-%d %H:%M:%S"
+    );
+
     Logger::sink->set_filter(severity > 0);
     Logger::sink->set_formatter(expressions::stream << severity << ": " <<
     expressions::smessage);
