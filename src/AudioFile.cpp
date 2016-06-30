@@ -3,6 +3,7 @@
 class AudioFile {
     public:
     private:
+        SndfileHandle file;
 };
 
 class AnalysedAudioFile : public AudioFile {
