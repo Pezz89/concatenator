@@ -11,6 +11,5 @@ int main(int argc, char** argv) {
     ArgumentParser argparse = ArgumentParser();
     argparse.parseargs(argc, argv);
     log.error("My pretty little error!");
-    cout << "Hello world!" << endl;
     return 0;
 }
