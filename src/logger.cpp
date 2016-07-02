@@ -27,12 +27,6 @@ Logger::Logger() {
     boost::log::register_simple_formatter_factory< boost::log::trivial::severity_level, char >("Severity");
     Logger::sink = boost::make_shared<text_sink>();
 
-
-    logging::add_file_log
-    (
-        keywords::file_name = "concatenator_%N.log",
-        keywords::rotation_size = 10 * 1024 * 1024
-    );
     Logger::sink->set_formatter
     (
         expr::stream << 
