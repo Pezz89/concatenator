@@ -9,11 +9,12 @@ class Logger {
     public:
         Logger();
         ~Logger() {};
+        void trace(std::string str);
         void debug(std::string str);
         void info(std::string str);
         void warning(std::string str);
         void error(std::string str);
-        void critical(std::string str);
+        void fatal(std::string str);
 
     private:
         static void formatter(boost::log::record_view const& rec, boost::log::formatting_ostream& strm);
