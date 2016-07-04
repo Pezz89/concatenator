@@ -21,12 +21,7 @@ set(CMAKE_CXX_FLAGS "-g -Wall ")
 # Set cmake to output executable to the bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Find all included header files.
-include_directories(include)
-include_directories(${Boost_INCLUDE_DIRS}) 
-add_subdirectory(external)
 
-# Build the executable from the source files found
 
 
 set(CONCATENATOR_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
@@ -35,15 +30,26 @@ set(CONCATENATOR_TEST_DIR ${PROJECT_SOURCE_DIR}/tests)
 
 set(CONCATENATOR_SOURCE_FILES
     ${CONCATENATOR_SOURCE_DIR}/Concatenator.cpp
+    ${CONCATENATOR_SOURCE_DIR}/AudioDatabase.cpp
+    ${CONCATENATOR_SOURCE_DIR}/AudioFile.cpp
+    ${CONCATENATOR_SOURCE_DIR}/Logger.cpp
+    ${CONCATENATOR_SOURCE_DIR}/ArgumentParser.cpp
 )
 set(CONCATENATOR_HEADER_FILES
-    ${CONCATENATOR_INCLUDE_DIR}/config.hpp
+    ${CONCATENATOR_INCLUDE_DIR}/ArgumentParser.h
+    ${CONCATENATOR_INCLUDE_DIR}/AudioDatabase.h
+    ${CONCATENATOR_INCLUDE_DIR}/AudioFile.h
+    ${CONCATENATOR_INCLUDE_DIR}/Logger.h
 )
 set(CONCATENATOR_TEST_SOURCES
     ${CONCATENATOR_TEST_DIR}/Concatenator_Basic_Tests.cpp
 )
 
-add_executable(concatenator ${CONCATENATOR_SOURCE_DIR}/concatenator.cpp)
+include_directories(${CONCATENATOR_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS}) 
+add_subdirectory(external)
+
+add_executable(concatenator ${CONCATENATOR_SOURCE_FILES} ${CONCATENATOR_HEADER_FILES})
 
 target_link_libraries(concatenator ${Boost_LIBRARIES})
 # Test build options (this code adapted from: https://github.com/ComicSansMS/GhulbusBase/blob/master/CMakeLists.txt)
@@ -72,9 +78,13 @@ if(BUILD_TESTS)
         )
         add_library(Catch INTERFACE)
         add_dependencies(Catch Catch-External)
+
         target_include_directories(Catch INTERFACE ${CMAKE_BINARY_DIR}/external/Catch/include)
     endif()
 
-    add_executable(Concatenator_Base_Test ${CONCATENATOR_TEST_SOURCES})
+
+    add_executable(Concatenator_Basic_Tests ${CONCATENATOR_TEST_SOURCES})
+    target_link_libraries(Concatenator_Basic_Tests Catch)
     add_test(NAME TestBase COMMAND Concatenator_Base_Test)
 endif()
+
