@@ -1,13 +1,15 @@
 #include <iostream>
-#include "argument_parser.h"
+#include "Logger.h"
+#include "ArgumentParser.h"
+#include "AudioDatabase.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
+    Logger log = Logger();
 
-    // Declare the supported options.
     ArgumentParser argparse = ArgumentParser();
     argparse.parseargs(argc, argv);
-    cout << "Hello world!" << endl;
+    log.error("My pretty little error!");
     return 0;
 }
