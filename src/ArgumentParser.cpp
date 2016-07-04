@@ -16,6 +16,7 @@ ArgumentParser::ArgumentParser() : desc("Allowed options") {
     ;
 }
 
+/*
 int ArgumentParser::parseargs(int argc, char** argv) {
     po::store(po::command_line_parser(argc, argv).options(desc).positional(positionalOptions).run(), vm);
     po::notify(vm);  
@@ -27,3 +28,4 @@ int ArgumentParser::parseargs(int argc, char** argv) {
     }
     return 0;
 }
+*/
