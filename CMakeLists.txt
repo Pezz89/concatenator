@@ -3,9 +3,12 @@ set(CMAKE_CXX_STANDARD 11)
 # Set the project name
 project (concatenator)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
 ###############################################################################
 ### Boost Settings
 find_package(Boost 1.60.0 COMPONENTS program_options log log_setup thread date_time filesystem system REQUIRED) 
+find_package(LibSndFile REQUIRED)
 
 if (NOT FO_BOOST_STATIC_LINK)
 add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_ALL_DYN_LINK -DBOOST_LOG_DYN_LINK)
@@ -48,6 +51,7 @@ set(CONCATENATOR_TEST_SOURCES
 
 include_directories(${CONCATENATOR_INCLUDE_DIR})
 include_directories(${Boost_INCLUDE_DIRS}) 
+include_directories(${LIBSNDFILE_INCLUDE_DIR}) 
 add_subdirectory(external)
 
 add_executable(concatenator ${CONCATENATOR_SOURCE_FILES} ${CONCATENATOR_HEADER_FILES})

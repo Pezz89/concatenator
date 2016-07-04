@@ -1,12 +1,22 @@
-#include <sndfile.hh>
+#include "AudioFile.h"
+#include <string>
+using namespace std;
 
-class AudioFile {
-    public:
-    private:
-        SndfileHandle file;
-};
+AudioFile::AudioFile(const char * fname, bool open)
+{
+    if(open) {
+        file = SndfileHandle(fname);
+    }
+    name = fname;
+}
 
-class AnalysedAudioFile : public AudioFile {
-    public:
-    private:
-};
+AudioFile::AudioFile(const char * fname, const int format, const int channels, const int samplerate)
+{
+
+}
+
+void AudioFile::swap_mode(string m)
+{
+    
+}
+
