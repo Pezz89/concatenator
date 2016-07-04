@@ -26,7 +26,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CONCATENATOR_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(CONCATENATOR_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
-set(CONCATENATOR_TEST_DIR ${PROJECT_SOURCE_DIR}/tests)
+set(CONCATENATOR_TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 
 set(CONCATENATOR_SOURCE_FILES
     ${CONCATENATOR_SOURCE_DIR}/Concatenator.cpp
@@ -42,7 +42,8 @@ set(CONCATENATOR_HEADER_FILES
     ${CONCATENATOR_INCLUDE_DIR}/Logger.h
 )
 set(CONCATENATOR_TEST_SOURCES
-    ${CONCATENATOR_TEST_DIR}/Concatenator_Basic_Tests.cpp
+    ${CONCATENATOR_TEST_DIR}/Concatenator_Test.cpp
+    ${CONCATENATOR_TEST_DIR}/Basic_Tests.cpp
 )
 
 include_directories(${CONCATENATOR_INCLUDE_DIR})
@@ -83,8 +84,8 @@ if(BUILD_TESTS)
     endif()
 
 
-    add_executable(Concatenator_Basic_Tests ${CONCATENATOR_TEST_SOURCES})
-    target_link_libraries(Concatenator_Basic_Tests Catch)
-    add_test(NAME TestBase COMMAND Concatenator_Base_Test)
+    add_executable(Concatenator_Test ${CONCATENATOR_TEST_SOURCES})
+    target_link_libraries(Concatenator_Test Catch)
+    add_test(NAME TestBase COMMAND Concatenator_Test)
 endif()
 
