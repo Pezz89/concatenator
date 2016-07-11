@@ -1,3 +1,5 @@
+#ifndef LOGGER_H
+#define LOGGER_H
 #include <boost/shared_ptr.hpp>
 #include <boost/log/sinks.hpp>
 #include <boost/log/sources/severity_logger.hpp>
@@ -31,3 +33,4 @@ class Logger {
         //Define a logger
         boost::log::sources::severity_logger< boost::log::trivial::severity_level > lg;
 };
+#endif

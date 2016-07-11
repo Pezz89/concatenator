@@ -87,8 +87,12 @@ void Logger::warning(std::string str) {
 
 void Logger::error(std::string str) {
     BOOST_LOG_SEV(lg, logging::trivial::error) << str;
+    Logger::console_sink->flush();
+    Logger::file_sink->flush();
 }
 
 void Logger::fatal(std::string str) {
     BOOST_LOG_SEV(lg, logging::trivial::fatal) << str;
+    Logger::console_sink->flush();
+    Logger::file_sink->flush();
 }
