@@ -20,7 +20,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 ###############################################################################
 
 # Set build flags
-set(CMAKE_CXX_FLAGS "-g -Wall ")
+set(CMAKE_CXX_FLAGS "-g -Wall")
 # Set cmake to output executable to the bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -56,7 +56,10 @@ add_subdirectory(external)
 
 add_executable(concatenator ${CONCATENATOR_SOURCE_FILES} ${CONCATENATOR_HEADER_FILES})
 
+# Link to external libraries
 target_link_libraries(concatenator ${Boost_LIBRARIES})
+target_link_libraries(concatenator ${LIBSNDFILE_LIBRARIES})
+
 # Test build options (this code adapted from: https://github.com/ComicSansMS/GhulbusBase/blob/master/CMakeLists.txt)
 option(BUILD_TESTS "Determines whether to build tests." ON)
 if(BUILD_TESTS)

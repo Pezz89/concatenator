@@ -3,19 +3,17 @@
 
 class AudioFile {
     public:
-        AudioFile(const char * fname, bool open=true);
-        AudioFile(const char * fname, int format, int channels, int samplerate);
-        ~AudioFile();
-        void swap_mode(std::string m);
-        bool is_open() { return open; };
-    private:
-        std::string mode;
-        std::string name;
-        bool open;
+        AudioFile(const char * &name, const int &mode=SFM_RDWR, const int &format=0, const int &channels=0, const int &samplerate=0);
+        int open(const int &mode=SFM_READ, const int &format=0, const int &channels=0, const int &samplerate=0);
+    protected:
         SndfileHandle file;
+        SF_INFO* file_info;
+    private:
+        std::string name;
 };
 
 class AnalysedAudioFile : public AudioFile {
     public:
     private:
 };
+
