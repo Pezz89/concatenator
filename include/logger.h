@@ -10,7 +10,7 @@
 class Logger {
     public:
         Logger();
-        ~Logger() {};
+        ~Logger();
         void trace(std::string str);
         void debug(std::string str);
         void info(std::string str);

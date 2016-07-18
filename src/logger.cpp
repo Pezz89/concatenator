@@ -69,6 +69,10 @@ Logger::Logger() {
 
 };
 
+Logger::~Logger() {
+    Logger::console_sink->flush();
+    Logger::file_sink->flush();
+}
 void Logger::trace(std::string str) {
     BOOST_LOG_SEV(lg, logging::trivial::trace) << str;
 }

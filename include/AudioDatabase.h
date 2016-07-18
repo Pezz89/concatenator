@@ -9,6 +9,7 @@ using std::string;
 using std::cout;
 using std::endl;
 using std::list;
+using std::vector;
 
 /*!
  * A class that encapsulates a collection of AudioFile objects in order to
@@ -17,7 +18,7 @@ using std::list;
 
 class AudioDatabase {
     public:
-        AudioDatabase(const std::string audio_dir, const std::string database_dir, list<string>& analyses, Logger* log);
+        AudioDatabase(const std::string database_dir, vector<string>& analyses, Logger* log, const std::string audio_dir="");
     private:
         std::string database_dir = "";
         std::string audio_dir = "";
