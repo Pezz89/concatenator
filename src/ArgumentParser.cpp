@@ -18,12 +18,12 @@ ArgumentParser::ArgumentParser() : desc("Allowed options") {
         ("output", po::value<string>()->required(), "Output location")
         ("analyses,a", po::value<vector<string>>()->multitoken(), "Analysis "
          "strings specifying analyses to use for database comparison.")
-        ("tar_db", po::value<string>(), "Specifies the "
-         "directory to create the target database and store analyses in. If "
-         "not specified then the target directory will be used directly.")
-        ("src_db", po::value<string>(), "Specifies the "
+        ("src_audio", po::value<string>(), "Specifies the "
          "directory to create the source database and store analyses in. If "
          "not specified then the " "source directory will be used directly.")
+        ("tar_audio", po::value<string>(), "Specifies the "
+         "directory to create the target database and store analyses in. If "
+         "not specified then the target directory will be used directly.")
     ;
 }
 

@@ -3,6 +3,7 @@
 #include <list>
 #include <set>
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 #include "logger.h"
 
 using std::string;
@@ -18,16 +19,27 @@ using std::vector;
 
 class AudioDatabase {
     public:
-        AudioDatabase(const std::string database_dir, vector<string>& analyses, Logger* log, const std::string audio_dir="");
+        AudioDatabase(
+                const std::string database_dir, 
+                vector<string>& analyses, 
+                Logger* log
+        );
+        void load_database(boost::filesystem::path source_dir, bool reanalyse=false);
+
     private:
-        std::string database_dir = "";
-        std::string audio_dir = "";
+        boost::filesystem::path database_dir;
+        boost::filesystem::path audio_dir;
         // Define a set that stores the locations of audiofiles in the database.
-        std::set<string> audio_file_set;
+        std::set<boost::filesystem::path> audio_file_set;
+        std::map<string, boost::filesystem::path> database_dirs;
         Logger* log;
 
+        void validate_analysis_list();
+        bool validate_filetype(const boost::filesystem::path& filepath);
+        void create_subdirs();
+        void organise_audio(boost::filesystem::path source_dir, bool symlink=true);
+        void register_audio();
 };
-
 
 /*! A function that determines whether a string value is found in the container.
 */

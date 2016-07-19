@@ -23,32 +23,35 @@ int main(int argc, char** argv) {
     try 
     {
     */
-        // Initialize object to parse arguments supplied by user from command
-        // line
-        ConcatenatorArgParse argparse = ConcatenatorArgParse();
-        // Parse arguments and exit program if specified (through use of --help
-        // or -h flag)
-        if(argparse.parseargs(argc, argv)) {
-            return SUCCESS;
-        }
-        
-        vector<string> analyses = argparse.get_analyses();
 
-        // Initialize the source audio database object with arguments provided from the command line.
-        AudioDatabase source_db = AudioDatabase(
-                argparse.get_source_db(), 
-                analyses, 
-                &log, 
-                argparse.get_src_audio_dir()
-        );
+    // Initialize object to parse arguments supplied by user from command
+    // line
+    ConcatenatorArgParse argparse = ConcatenatorArgParse();
+    // Parse arguments and exit program if specified (through use of --help
+    // or -h flag)
+    if(argparse.parseargs(argc, argv)) {
+        return SUCCESS;
+    }
+    
+    vector<string> analyses = argparse.get_analyses();
 
-        // Initialize the target audio database object with arguments provided from the command line.
-        AudioDatabase target_db = AudioDatabase(
-                argparse.get_target_db(), 
-                analyses, 
-                &log, 
-                argparse.get_tar_audio_dir()
-        );
+    // Initialize the source audio database object with arguments provided from the command line.
+    AudioDatabase source_db = AudioDatabase(
+            argparse.get_source_db(), 
+            analyses, 
+            &log
+    );
+    source_db.load_database(argparse.get_src_audio_dir());
+
+    /*
+    // Initialize the target audio database object with arguments provided from the command line.
+    AudioDatabase target_db = AudioDatabase(
+            argparse.get_target_db(), 
+            analyses, 
+            &log
+    );
+    target_db.load_database(argparse.get_tar_audio_dir());
+    */
 
     /*
     }
@@ -58,7 +61,7 @@ int main(int argc, char** argv) {
         error.append(e.what());
 
         log.error(error);
-        return ERROR_UNHANDLED_EXCEPTION; 
+        throw;
     }   
     */
     return SUCCESS;

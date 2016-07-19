@@ -1,11 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "boost/program_options.hpp"
+#include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 
 using std::vector;
 using std::string;
 namespace po = boost::program_options;
+namespace fs = boost::filesystem;
 
 class ArgumentParser {
     public:
@@ -33,6 +35,6 @@ class ConcatenatorArgParse : public ArgumentParser {
        vector<string> get_analyses() { return (*this)["analyses"].as<vector<string>>(); }
        string get_source_db() { return (*this)["source"].as<string>(); }
        string get_target_db() { return (*this)["target"].as<string>(); }
-       string get_tar_audio_dir() { return ((*this)["tar_db"].empty() ? (*this)["target"].as<string>() : (*this)["tar_db"].as<string>()); }
-       string get_src_audio_dir() { return ((*this)["src_db"].empty() ? (*this)["source"].as<string>() : (*this)["src_db"].as<string>()); }
+       fs::path get_tar_audio_dir() { return ((*this)["tar_audio"].empty() ? fs::path("") : fs::path((*this)["tar_audio"].as<string>())); }
+       fs::path get_src_audio_dir() { return ((*this)["src_audio"].empty() ? fs::path("") : fs::path((*this)["src_audio"].as<string>())); }
 };
