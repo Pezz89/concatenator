@@ -44,7 +44,7 @@ bool in_array(string &value, const container &array)
   \param end - An iterator pointing to the point at which to stop analysing strings.
 */
 template<typename Iter>
-Iter check_analyses_valid(Iter iterator, Iter end)
+std::list<string> check_analyses_valid(Iter iterator, Iter end)
 {
     static std::list<string> valid_analyses = {
         "RMS",
@@ -63,13 +63,14 @@ Iter check_analyses_valid(Iter iterator, Iter end)
         "SKEWNESS",
         "HARM_RATIO"
     };
+    std::list<string> invalid;
 
     while(iterator != end)
     {
         if(!in_array(*iterator, valid_analyses)) {
-            return iterator;
+            invalid.push_back(*iterator);
         }
         ++iterator;
     }
-    return iterator;
+    return invalid;
 }

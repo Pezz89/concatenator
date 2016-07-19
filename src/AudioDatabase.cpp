@@ -1,9 +1,11 @@
 #include <string>
 #include <vector>
+#include <list>
 #include "AudioDatabase.h"
 #include <stdexcept>
 #include <set>
 #include <algorithm>
+#include <boost/algorithm/string/join.hpp>
 
 using namespace std;
 
@@ -20,14 +22,15 @@ AudioDatabase::AudioDatabase(
     log->info("Audio directory: " + audio_dir);
     // Remove duplicate strings from vector of analyses.
     std::vector<string>::iterator it;
-    it = std::unique (analyses.begin(), analyses.end());   // 10 20 30 20 10 ?  ?  ?  ?
+    it = std::unique (analyses.begin(), analyses.end());
     analyses.resize(std::distance(analyses.begin(),it));
     
     // Check that all analysis strings supplied refer to valid analyses.
-    vector<string>::const_iterator valid = check_analyses_valid(analyses.begin(), analyses.end());
-    if(valid != analyses.end()) {
-        string err = "The analysis string supplied to the AudioDatabase constructor is not valid: " + *valid;
-        throw std::runtime_error(err);
+    list<string> invalid = check_analyses_valid(analyses.begin(), analyses.end());
+    if(!invalid.empty()) {
+        string err = "The following analysis string(s) supplied to the AudioDatabase constructor are not valid: ";
+        string invalid_strings = boost::algorithm::join(invalid, " "); 
+        throw std::runtime_error(err + invalid_strings);
     }
 
     this->database_dir = database_dir;
