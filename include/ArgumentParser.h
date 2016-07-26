@@ -3,6 +3,7 @@
 #include <vector>
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 using std::vector;
 using std::string;
@@ -12,7 +13,6 @@ namespace fs = boost::filesystem;
 class ArgumentParser {
     public:
         ArgumentParser();
-        ~ArgumentParser() {};
         ArgumentParser(const ArgumentParser&);
         ArgumentParser& operator=(const ArgumentParser&);
         int parseargs(int argc, char** argv);
@@ -38,3 +38,14 @@ class ConcatenatorArgParse : public ArgumentParser {
        fs::path get_tar_audio_dir() { return ((*this)["tar_audio"].empty() ? fs::path("") : fs::path((*this)["tar_audio"].as<string>())); }
        fs::path get_src_audio_dir() { return ((*this)["src_audio"].empty() ? fs::path("") : fs::path((*this)["src_audio"].as<string>())); }
 };
+
+class ConfigParser {
+    public:
+        ConfigParser();
+    private:
+};
+
+class ConcatenatorConfParse : public ConfigParser {
+};
+
+boost::property_tree::ptree generate_concatenator_settings(ConcatenatorArgParse arg, ConcatenatorConfParse conf);
