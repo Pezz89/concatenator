@@ -4,8 +4,11 @@
 #include "AudioDatabase.h"
 #include <list>
 #include <string>
+#include <boost/property_tree/ptree.hpp>
 
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 namespace 
 { 
@@ -32,14 +35,18 @@ int main(int argc, char** argv) {
     if(argparse.parseargs(argc, argv)) {
         return SUCCESS;
     }
-    
+
+    fs::path config_filepath = argparse.get_config_path();
+    if(config_filepath.empty()) {
+        config_filepath = fs::path("./config.json");
+    }
     vector<string> analyses = argparse.get_analyses();
 
     // Initialize the source audio database object with arguments provided from the command line.
     AudioDatabase source_db = AudioDatabase(
             argparse.get_source_db(), 
             analyses, 
-            &log
+            log
     );
     source_db.load_database(argparse.get_src_audio_dir());
 
