@@ -32,11 +32,15 @@ class ArgumentParser {
         po::positional_options_description positionalOptions; 
         po::options_description generic;
         po::options_description config;
+        string config_path;
 };
 
 class ConcatenatorArgParse : public ArgumentParser {
     public:
-       vector<string> get_analyses() { return (*this)["active_analyses"].as<vector<string>>(); }
+       vector<string> get_analyses() { 
+           std::cout << (*this)["active_analyses"].as<vector<string>>()[0] << std::endl;
+           return (*this)["active_analyses"].as<vector<string>>(); 
+       }
        string get_source_db() { return (*this)["source"].as<string>(); }
        string get_target_db() { return (*this)["target"].as<string>(); }
        fs::path get_tar_audio_dir() { return ((*this)["tar_audio"].empty() ? fs::path("") : fs::path((*this)["tar_audio"].as<string>())); }

@@ -27,6 +27,14 @@ AudioDatabase::AudioDatabase(
     it = std::unique (analyses.begin(), analyses.end());
     analyses.resize(std::distance(analyses.begin(),it));
     
+    validate_analysis_list(analyses);
+
+    database_dirs.insert({"root", fs::path(database_dir)});
+    this->audio_dir = fs::path(audio_dir);
+}
+
+void AudioDatabase::validate_analysis_list(vector<string>& analyses)
+{
     // Check that all analysis strings supplied refer to valid analyses.
     list<string> invalid = check_analyses_valid(analyses.begin(), analyses.end());
     if(!invalid.empty()) {
@@ -34,13 +42,6 @@ AudioDatabase::AudioDatabase(
         string invalid_strings = boost::algorithm::join(invalid, " "); 
         throw std::runtime_error(err + invalid_strings);
     }
-
-    database_dirs.insert({"root", fs::path(database_dir)});
-    this->audio_dir = fs::path(audio_dir);
-}
-
-void AudioDatabase::validate_analysis_list()
-{
 }
 
 void AudioDatabase::load_database(fs::path source_dir, bool reanalyse)
@@ -83,6 +84,8 @@ void AudioDatabase::load_database(fs::path source_dir, bool reanalyse)
 
     // Find all audio in the database and store references for use later...
     register_audio();
+
+    //Find/create HDF5 file for storage of analysis data.
 
 }
 

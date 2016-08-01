@@ -34,7 +34,7 @@ class AudioDatabase {
         std::map<string, boost::filesystem::path> database_dirs;
         Logger log;
 
-        void validate_analysis_list();
+        void validate_analysis_list(vector<string>& analyses);
         bool validate_filetype(const boost::filesystem::path& filepath);
         void create_subdirs();
         void organise_audio(boost::filesystem::path source_dir, bool symlink=true);
