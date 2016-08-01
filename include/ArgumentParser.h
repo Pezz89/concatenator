@@ -3,16 +3,19 @@
 #include <vector>
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include "logger.h"
 
 using std::vector;
 using std::string;
+
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
+namespace pt = boost::property_tree;
 
 class ArgumentParser {
     public:
         ArgumentParser();
-        ~ArgumentParser() {};
         ArgumentParser(const ArgumentParser&);
         ArgumentParser& operator=(const ArgumentParser&);
         int parseargs(int argc, char** argv);
@@ -27,14 +30,17 @@ class ArgumentParser {
         //Create a positional options object for parsing input, output etc
         //positional arguments from command line.
         po::positional_options_description positionalOptions; 
-        po::options_description desc;
+        po::options_description generic;
+        po::options_description config;
 };
 
 class ConcatenatorArgParse : public ArgumentParser {
     public:
-       vector<string> get_analyses() { return (*this)["analyses"].as<vector<string>>(); }
+       vector<string> get_analyses() { return (*this)["active_analyses"].as<vector<string>>(); }
        string get_source_db() { return (*this)["source"].as<string>(); }
        string get_target_db() { return (*this)["target"].as<string>(); }
        fs::path get_tar_audio_dir() { return ((*this)["tar_audio"].empty() ? fs::path("") : fs::path((*this)["tar_audio"].as<string>())); }
        fs::path get_src_audio_dir() { return ((*this)["src_audio"].empty() ? fs::path("") : fs::path((*this)["src_audio"].as<string>())); }
+       fs::path get_config_path() { return fs::path((*this)["config"].as<string>()); }
 };
+
