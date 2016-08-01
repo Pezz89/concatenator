@@ -21,9 +21,9 @@ ArgumentParser::ArgumentParser() : generic("Command line options"), config("Conf
     // Add optional arguments to allow control over application settings from the command line.
     generic.add_options()
         ("help,h", "produce help message")
-        ("source", po::value<string>()->required(), "Source location")
-        ("target", po::value<string>()->required(), "Target location")
-        ("output", po::value<string>()->required(), "Output location")
+        ("source", po::value<string>(), "Source location")
+        ("target", po::value<string>(), "Target location")
+        ("output", po::value<string>(), "Output location")
         ("active_analyses,a", po::value<vector<string>>()->multitoken(), "Analysis "
          "strings specifying analyses to use for database comparison.")
         ("src_audio", po::value<string>(), "Specifies the "
@@ -32,13 +32,16 @@ ArgumentParser::ArgumentParser() : generic("Command line options"), config("Conf
         ("tar_audio", po::value<string>(), "Specifies the "
          "directory to create the target database and store analyses in. If "
          "not specified then the target directory will be used directly.")
-        ("config,c", po::value<string>()->default_value("config.json"), 
+        ("config,c", po::value<string>()->default_value("config.ini"), 
          "Specifies the location of a config file to be used for configuring "
-         "the program. If no config is specified, the default ./config.json "
+         "the program. If no config is specified, the default ./config.ini "
          "file found in the concatenator project directory, will be used.")
     ;
 
     config.add_options()
+        ("source", po::value<string>()->required(), "Source location")
+        ("target", po::value<string>()->required(), "Target location")
+        ("output", po::value<string>()->required(), "Output location")
         ("active_analyses", po::value<vector<string>>()->multitoken(), "Analysis "
          "strings specifying analyses to use for database comparison.")
         ("src_audio", po::value<string>(), "Specifies the "
@@ -59,18 +62,22 @@ int ArgumentParser::parseargs(int argc, char** argv) {
     po::options_description config_file_options;
     config_file_options.add(config);
 
-    std::ifstream settings_file("config.ini");
-
     po::store(po::command_line_parser(argc, argv).options(generic).positional(positionalOptions).run(), vm);;
+    po::notify(vm);  
+    
+    std::ifstream settings_file(vm["config"].as<string>());
+    if(!settings_file) {
+        throw runtime_error("The configuration file could not be found: " + vm["config"].as<string>());
+    }
+
     po::store(po::parse_config_file(settings_file, config), vm);
+    po::notify(vm);  
 
     // If help option is specified then output help message
     if (vm.count("help")) {
         cout << generic << "\n";
-        return 1;
+        return 0;
     }
-
-    po::notify(vm);  
 
     return 0;
 }
@@ -82,4 +89,21 @@ const po::variable_value& ArgumentParser::operator [](char const *b) const {
 po::variables_map::size_type ArgumentParser::count(char const *ref) {
     return vm.count(ref);
 }
+/*
+void split(const string &s, char delim, vector<string> &elems) {
+    stringstream ss(s);
+    string item;
+    while (getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+}
 
+
+vector<string> split(const string &s, char delim=' ') {
+    vector<string> elems;
+    split(s, delim, elems);
+    return elems;
+}
+
+vector<string> ConcatenatorArgParse::get_analyses() { return split((*this)["active_analyses"].as<string>()); }
+*/
