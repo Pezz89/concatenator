@@ -24,7 +24,7 @@ ArgumentParser::ArgumentParser() : generic("Command line options"), config("Conf
         ("source", po::value<string>()->required(), "Source location")
         ("target", po::value<string>()->required(), "Target location")
         ("output", po::value<string>()->required(), "Output location")
-        ("analyses,a", po::value<vector<string>>()->multitoken(), "Analysis "
+        ("active_analyses,a", po::value<vector<string>>()->multitoken(), "Analysis "
          "strings specifying analyses to use for database comparison.")
         ("src_audio", po::value<string>(), "Specifies the "
          "directory to create the source database and store analyses in. If "
@@ -39,7 +39,7 @@ ArgumentParser::ArgumentParser() : generic("Command line options"), config("Conf
     ;
 
     config.add_options()
-        ("analysis.active_analyses", po::value<vector<string>>()->multitoken(), "Analysis "
+        ("active_analyses", po::value<vector<string>>()->multitoken(), "Analysis "
          "strings specifying analyses to use for database comparison.")
         ("src_audio", po::value<string>(), "Specifies the "
          "directory to create the source database and store analyses in. If "
@@ -72,14 +72,6 @@ int ArgumentParser::parseargs(int argc, char** argv) {
 
     po::notify(vm);  
 
-    if (vm["analyses"].empty()) {
-        vector<string> v = vm["analysis.active_analyses"].as<vector<string>>();
-        for(std::vector<string>::iterator it = v.begin(); it != v.end(); ++it) {
-            std::cout << *it;
-        }
-
-        throw runtime_error("No analysis strings provided as arguments.");
-    }
     return 0;
 }
 

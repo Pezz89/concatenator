@@ -36,7 +36,7 @@ class ArgumentParser {
 
 class ConcatenatorArgParse : public ArgumentParser {
     public:
-       vector<string> get_analyses() { return (*this)["analyses"].as<vector<string>>(); }
+       vector<string> get_analyses() { return (*this)["active_analyses"].as<vector<string>>(); }
        string get_source_db() { return (*this)["source"].as<string>(); }
        string get_target_db() { return (*this)["target"].as<string>(); }
        fs::path get_tar_audio_dir() { return ((*this)["tar_audio"].empty() ? fs::path("") : fs::path((*this)["tar_audio"].as<string>())); }
