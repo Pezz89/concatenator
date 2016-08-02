@@ -8,10 +8,12 @@
 #include <boost/algorithm/string/join.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
+#include "H5Cpp.h"
 
 namespace fs = boost::filesystem;
 
 using namespace std;
+using namespace H5;
 
 AudioDatabase::AudioDatabase(
         const string database_dir, 
@@ -31,6 +33,9 @@ AudioDatabase::AudioDatabase(
 
     database_dirs.insert({"root", fs::path(database_dir)});
     this->audio_dir = fs::path(audio_dir);
+
+    // Prevent HDF5 library from printing errors that are handeled in try/catch blocks.
+    Exception::dontPrint();
 }
 
 void AudioDatabase::validate_analysis_list(vector<string>& analyses)
@@ -86,7 +91,31 @@ void AudioDatabase::load_database(fs::path source_dir, bool reanalyse)
     register_audio();
 
     //Find/create HDF5 file for storage of analysis data.
+    register_data();
 
+}
+
+void AudioDatabase::register_data()
+{
+    fs::path data_path = database_dirs["data"]/fs::path("data.hdf5");
+    try
+    {
+        data_file = H5File(data_path.string(), H5F_ACC_RDWR);
+        log.info("Reading database data from: " + (database_dirs["data"]/fs::path("data.hdf5")).string());
+    }
+    catch(FileIException &e)
+    {
+        if(!fs::exists(data_path.string()))
+        {
+            data_file = H5File(data_path.string(), H5F_ACC_TRUNC);
+            log.info("Creating new database file at: " + (database_dirs["data"]/fs::path("data.hdf5")).string());
+        }
+        else
+        {
+            log.error("Data file exists but cannot be read: " + data_path.string());
+            throw;
+        }
+    }
 }
 
 void AudioDatabase::create_subdirs()

@@ -2,22 +2,39 @@
 #include <string>
 #include <vector>
 #include <iostream>
-using namespace std;
+#include "logger.h"
+#include "H5Cpp.h"
 
-AudioFile::AudioFile(const char * &name, const int &mode, const int &format, const int &channels, const int &samplerate)
+using namespace std;
+using namespace H5;
+
+AnalysedAudioFile::AnalysedAudioFile(fs::path filepath, Group& filegroup, Logger& log) : filepath(filepath), filegroup(filegroup), log(log)
 {
-    this->name = name;
-    open(mode, format, channels, samplerate);
+
 }
 
-int AudioFile::open(const int &mode, const int &format, const int &channels, const int &samplerate)
+AnalysedAudioFile::~AnalysedAudioFile()
+{
+}
+
+int AnalysedAudioFile::open(const int &mode, const int &format, const int &channels, const int &samplerate)
 {
     switch(mode){
-        case SFM_READ: file = SndfileHandle(name);
-        case SFM_WRITE: file = SndfileHandle(name, SFM_WRITE, format, channels, samplerate);
-        case SFM_RDWR: file = SndfileHandle(name, SFM_RDWR, format, channels, samplerate);
+        case SFM_READ: file = SndfileHandle(filepath.string());
+        case SFM_WRITE: file = SndfileHandle(filepath.string(), SFM_WRITE, format, channels, samplerate);
+        case SFM_RDWR: file = SndfileHandle(filepath.string(), SFM_RDWR, format, channels, samplerate);
     }
 
     return 0;
 }
 
+int AnalysedAudioFile::open()
+{
+    file = SndfileHandle(filepath.string());
+    return 0;
+}
+
+std::string AnalysedAudioFile::name()
+{
+    return filepath.stem().string();
+}

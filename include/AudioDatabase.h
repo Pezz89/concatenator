@@ -4,6 +4,7 @@
 #include <set>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <H5Cpp.h>
 #include "logger.h"
 
 using std::string;
@@ -38,7 +39,15 @@ class AudioDatabase {
         bool validate_filetype(const boost::filesystem::path& filepath);
         void create_subdirs();
         void organise_audio(boost::filesystem::path source_dir, bool symlink=true);
+        // Used to find and store paths to all audio that is part of the current database
         void register_audio();
+
+        // Declare a HDF5 file object to be used for storing analysis data.
+        H5::H5File data_file;
+
+        void register_data();
+
+        void analyse_database();
 };
 
 /*! A function that determines whether a string value is found in the container.

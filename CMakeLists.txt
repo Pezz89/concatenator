@@ -9,6 +9,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 ### Boost Settings
 find_package(Boost 1.60.0 COMPONENTS program_options log log_setup thread date_time filesystem system REQUIRED) 
 find_package(LibSndFile REQUIRED)
+find_package(HDF5 COMPONENTS CXX REQUIRED)
 
 if (NOT FO_BOOST_STATIC_LINK)
 add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_ALL_DYN_LINK -DBOOST_LOG_DYN_LINK)
@@ -23,9 +24,6 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 # Set cmake to output executable to the bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-
-
 
 set(CONCATENATOR_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(CONCATENATOR_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
@@ -52,6 +50,7 @@ set(CONCATENATOR_TEST_SOURCES
 include_directories(${CONCATENATOR_INCLUDE_DIR})
 include_directories(${Boost_INCLUDE_DIRS}) 
 include_directories(${LIBSNDFILE_INCLUDE_DIR}) 
+include_directories(${HDF5_INCLUDE_DIRS}) 
 add_subdirectory(external)
 
 add_executable(concatenator ${CONCATENATOR_SOURCE_FILES} ${CONCATENATOR_HEADER_FILES})
@@ -59,6 +58,7 @@ add_executable(concatenator ${CONCATENATOR_SOURCE_FILES} ${CONCATENATOR_HEADER_F
 # Link to external libraries
 target_link_libraries(concatenator ${Boost_LIBRARIES})
 target_link_libraries(concatenator ${LIBSNDFILE_LIBRARIES})
+target_link_libraries(concatenator ${HDF5_LIBRARIES})
 
 # Test build options (this code adapted from: https://github.com/ComicSansMS/GhulbusBase/blob/master/CMakeLists.txt)
 option(BUILD_TESTS "Determines whether to build tests." ON)
