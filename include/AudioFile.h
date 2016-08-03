@@ -8,32 +8,47 @@ namespace fs = boost::filesystem;
 
 class AnalysedAudioFile {
     public:
-        AnalysedAudioFile(fs::path name, H5::Group& filegroup, Logger& log);
-        ~AnalysedAudioFile();
+        AnalysedAudioFile(fs::path filepath) : filepath(filepath) {}
         void analyse();
-        int open(const int &mode, const int &format, const int &channels, const int &samplerate);
-        int open();
-        int open_data(const H5::H5File& data_file);
-        std::string name();
 
         template <typename T>
         int open_data(const T& data)
         {
             try {
                 filegroup = data.createGroup(name());
-                log.debug("Created data group for audio file: " + filepath.filename().string());
+                DEBUG << "Created data group for audio file: " <<  filepath.filename().string();
             }
             catch(H5::GroupIException e){
                 filegroup = data.openGroup(name());
-                log.debug("Loaded data group for audio file: " + filepath.filename().string());
+                DEBUG << "Loaded data group for audio file: " <<  filepath.filename().string();
             }
             return 0;
         }
     
-    private:
-        SndfileHandle file;
-        fs::path filepath;
-        H5::Group filegroup;
-        Logger log;
-};
+        int open(const int &mode, const int &format, const int &channels, const int &samplerate)
+        {
+            switch(mode){
+                case SFM_READ: file = SndfileHandle(filepath.string());
+                case SFM_WRITE: file = SndfileHandle(filepath.string(), SFM_WRITE, format, channels, samplerate);
+                case SFM_RDWR: file = SndfileHandle(filepath.string(), SFM_RDWR, format, channels, samplerate);
+            }
+
+            return 0;
+        }
+
+        int open()
+        {
+            file = SndfileHandle(filepath.string());
+            return 0;
+        }
+
+        std::string name()
+        {
+            return filepath.stem().string();
+        }
+        private:
+            SndfileHandle file;
+            fs::path filepath;
+            H5::Group filegroup;
+    };
 

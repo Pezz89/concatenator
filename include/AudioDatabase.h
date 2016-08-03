@@ -22,8 +22,7 @@ class AudioDatabase {
     public:
         AudioDatabase(
                 const std::string database_dir, 
-                vector<string>& analyses, 
-                Logger& log
+                vector<string>& analyses
         );
         void load_database(boost::filesystem::path source_dir, bool reanalyse=false);
 
@@ -33,7 +32,6 @@ class AudioDatabase {
         // Define a set that stores the locations of audiofiles in the database.
         std::set<boost::filesystem::path> audio_file_set;
         std::map<string, boost::filesystem::path> database_dirs;
-        Logger log;
 
         void validate_analysis_list(vector<string>& analyses);
         bool validate_filetype(const boost::filesystem::path& filepath);

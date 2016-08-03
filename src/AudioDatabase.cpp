@@ -1,5 +1,4 @@
-#include <string>
-#include <vector>
+#include <string> #include <vector>
 #include <list>
 #include "AudioDatabase.h"
 #include <stdexcept>
@@ -17,12 +16,11 @@ using namespace H5;
 
 AudioDatabase::AudioDatabase(
         const string database_dir, 
-        vector<string>& analyses,
-        Logger& log
-    ) : log(log)
+        vector<string>& analyses
+    )
 {
 
-    log.info("Database directory: " + database_dir);
+    INFO << "Database directory: " << database_dir;
 
     // Remove duplicate strings from vector of analyses.
     std::vector<string>::iterator it;
@@ -56,11 +54,11 @@ void AudioDatabase::load_database(fs::path source_dir, bool reanalyse)
     {
         if(create_directory(database_dirs["root"])) 
         {
-            log.debug("Database directory created: " + database_dir.string());
+            DEBUG << "Database directory created: " << database_dir.string();
         }
         else if(exists(database_dirs["root"]))
         {
-            log.debug("Database directory already exists: " + database_dir.string());
+            DEBUG << "Database directory already exists: " << database_dir.string();
         }
     } 
     catch(boost::filesystem::filesystem_error &e)
@@ -74,7 +72,7 @@ void AudioDatabase::load_database(fs::path source_dir, bool reanalyse)
 
     if(source_dir.empty()) {
         source_dir = database_dirs["audio"];
-        log.debug("Source directory not provided. Setting to:" + source_dir.string());
+        DEBUG << "Source directory not provided. Setting to:" << source_dir.string();
     }
 
     if(!exists(source_dir)) {
@@ -101,18 +99,18 @@ void AudioDatabase::register_data()
     try
     {
         data_file = H5File(data_path.string(), H5F_ACC_RDWR);
-        log.info("Reading database data from: " + (database_dirs["data"]/fs::path("data.hdf5")).string());
+        INFO << "Reading database data from: " <<  (database_dirs["data"]/fs::path("data.hdf5")).string();
     }
     catch(FileIException &e)
     {
         if(!fs::exists(data_path.string()))
         {
             data_file = H5File(data_path.string(), H5F_ACC_TRUNC);
-            log.info("Creating new database file at: " + (database_dirs["data"]/fs::path("data.hdf5")).string());
+            INFO << "Creating new database file at: " <<  (database_dirs["data"]/fs::path("data.hdf5")).string();
         }
         else
         {
-            log.error("Data file exists but cannot be read: " + data_path.string());
+            INFO << "Data file exists but cannot be read: " <<  data_path.string();
             throw;
         }
     }
@@ -130,11 +128,11 @@ void AudioDatabase::create_subdirs()
         try
         {
             if(create_directory(subdir)) {
-                log.info("Subdirectory created: " + subdir.string());
+                INFO << "Subdirectory created: " <<  subdir.string();
             }
             else if(exists(database_dirs["root"]))
             {
-                log.info("Subdirectory already exists: " + subdir.string());
+                INFO << "Subdirectory already exists: " <<  subdir.string();
             }
         }
         catch(boost::filesystem::filesystem_error &e)
@@ -169,7 +167,7 @@ bool AudioDatabase::validate_filetype(const fs::path& filepath)
 void AudioDatabase::organise_audio(fs::path source_dir, bool symlink)
 {
 
-    log.info("Organising audio directory at: " + database_dirs["audio"].string());
+    INFO << "Organising audio directory at: " <<  database_dirs["audio"].string();
     // Define the destination for copying/linking all valid audio files found.
     for(fs::recursive_directory_iterator iter(source_dir), end; iter != end; ++iter)
     {
@@ -180,7 +178,7 @@ void AudioDatabase::organise_audio(fs::path source_dir, bool symlink)
         }
 
         if(!validate_filetype(iter->path())) {
-            log.debug("File: " + iter->path().string() + " isn't a supported audiofile. Skipping...");
+            INFO << "File: " <<  iter->path().string() <<  " isn't a supported audiofile. Skipping...";
             continue;
         }
 
@@ -191,17 +189,17 @@ void AudioDatabase::organise_audio(fs::path source_dir, bool symlink)
             // Try to symlink the file to the audio directory of the database.
             try {
             fs::create_symlink(iter->path(), destination_file);
-            log.debug("Linked: " + iter->path().string() + " to: " + destination_file.string());
+            INFO << "Linked: " <<  iter->path().string() << " to: " <<  destination_file.string();
             }
             catch(boost::filesystem::filesystem_error &e){
                 // If symbolic linking fails then the file probably already exists at the location.
-                log.debug("Failed to link: " + iter->path().string() + " to " + destination_file.string() + " File may already exists.");
+                INFO << "Failed to link: " <<  iter->path().string() << " to " << destination_file.string() << " File may already exists.";
             }
         }
         else {
         // If it is in the database as a symlink, but a full copy is required
             if(fs::exists(destination_file) && !fs::is_symlink(destination_file)) {
-                log.debug("File already exists: " + iter->path().string()); 
+                INFO << "File already exists: " <<  iter->path().string();
                 continue;
             }
 
@@ -209,11 +207,11 @@ void AudioDatabase::organise_audio(fs::path source_dir, bool symlink)
             try {
                 fs::remove(destination_file);
                 fs::copy_file(iter->path(), destination_file, fs::copy_option::overwrite_if_exists);
-                log.debug("Copied: " + iter->path().string() + " to: " + destination_file.string());
+                DEBUG << "Copied: " <<  iter->path().string() << " to: " << destination_file.string();
             }
             catch(boost::filesystem::filesystem_error &e){
                 // If symbolic linking fails then the file probably already exists at the location.
-                log.debug("Failed to copy source file to: " + destination_file.string() + " File may already exists.");
+                DEBUG << "Failed to copy source file to: " <<  destination_file.string() << " File may already exists.";
             }
         }
     }
@@ -226,7 +224,7 @@ void AudioDatabase::register_audio()
     for(auto& entry : boost::make_iterator_range(fs::directory_iterator(database_dirs["audio"]), {})) 
     {
         if(validate_filetype(entry.path())) {
-            log.info("Registered audio file: " + entry.path().string());
+            INFO << "Registered audio file: " <<  entry.path().string();
             audio_file_set.insert(entry.path());
         }
     }

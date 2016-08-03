@@ -32,7 +32,6 @@ set(CONCATENATOR_TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 set(CONCATENATOR_SOURCE_FILES
     ${CONCATENATOR_SOURCE_DIR}/Concatenator.cpp
     ${CONCATENATOR_SOURCE_DIR}/AudioDatabase.cpp
-    ${CONCATENATOR_SOURCE_DIR}/AudioFile.cpp
     ${CONCATENATOR_SOURCE_DIR}/Logger.cpp
     ${CONCATENATOR_SOURCE_DIR}/ArgumentParser.cpp
 )
@@ -41,10 +40,14 @@ set(CONCATENATOR_HEADER_FILES
     ${CONCATENATOR_INCLUDE_DIR}/AudioDatabase.h
     ${CONCATENATOR_INCLUDE_DIR}/AudioFile.h
     ${CONCATENATOR_INCLUDE_DIR}/Logger.h
+    ${CONCATENATOR_INCLUDE_DIR}/hdf5helper.h
 )
 set(CONCATENATOR_TEST_SOURCES
     ${CONCATENATOR_TEST_DIR}/Concatenator_Test.cpp
     ${CONCATENATOR_TEST_DIR}/Basic_Tests.cpp
+    ${CONCATENATOR_SOURCE_DIR}/AudioDatabase.cpp
+    ${CONCATENATOR_SOURCE_DIR}/Logger.cpp
+    ${CONCATENATOR_SOURCE_DIR}/ArgumentParser.cpp
 )
 
 include_directories(${CONCATENATOR_INCLUDE_DIR})
@@ -90,9 +93,13 @@ if(BUILD_TESTS)
         target_include_directories(Catch INTERFACE ${CMAKE_BINARY_DIR}/external/Catch/include)
     endif()
 
+    add_executable(Concatenator_Test ${CONCATENATOR_TEST_SOURCES} ${CONCATENATOR_HEADER_FILES})
 
-    add_executable(Concatenator_Test ${CONCATENATOR_TEST_SOURCES})
+    target_link_libraries(Concatenator_Test ${Boost_LIBRARIES})
+    target_link_libraries(Concatenator_Test ${LIBSNDFILE_LIBRARIES})
+    target_link_libraries(Concatenator_Test ${HDF5_LIBRARIES})
     target_link_libraries(Concatenator_Test Catch)
+
     add_test(NAME TestBase COMMAND Concatenator_Test)
 endif()
 

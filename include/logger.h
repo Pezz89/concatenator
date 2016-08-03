@@ -1,36 +1,20 @@
-#ifndef LOGGER_H
-#define LOGGER_H
-#include <boost/shared_ptr.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
-#include <boost/log/utility/formatting_ostream.hpp>
+#pragma once
+
+#include <boost/log/expressions.hpp>
+#include <boost/log/sources/global_logger_storage.hpp>
+#include <boost/log/support/date_time.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/log/utility/setup.hpp>
 
-class Logger {
-    public:
-        Logger();
-        ~Logger();
-        void trace(std::string str);
-        void debug(std::string str);
-        void info(std::string str);
-        void warning(std::string str);
-        void error(std::string str);
-        void fatal(std::string str);
+#define TRACE BOOST_LOG_SEV(logger::get(), boost::log::trivial::trace)
+#define DEBUG BOOST_LOG_SEV(logger::get(), boost::log::trivial::debug)
+#define INFO  BOOST_LOG_SEV(logger::get(), boost::log::trivial::info)
+#define WARN  BOOST_LOG_SEV(logger::get(), boost::log::trivial::warning)
+#define ERROR BOOST_LOG_SEV(logger::get(), boost::log::trivial::error)
+#define FATAL BOOST_LOG_SEV(logger::get(), boost::log::trivial::fatal)
 
-    private:
+//Narrow-char thread-safe logger.
+typedef boost::log::sources::severity_logger_mt<boost::log::trivial::severity_level> logger_t;
 
-        static void log_formatter(boost::log::record_view const& rec, boost::log::formatting_ostream& strm);
-
-        // Define types for logging backends
-        typedef boost::log::sinks::synchronous_sink<boost::log::sinks::text_ostream_backend> console_backend;
-        typedef boost::log::sinks::synchronous_sink<boost::log::sinks::text_file_backend> file_backend;
-
-        // Define a sink for console output and for log file output
-        boost::shared_ptr<console_backend> console_sink;
-        boost::shared_ptr<file_backend> file_sink;
-
-        //Define a logger
-        boost::log::sources::severity_logger< boost::log::trivial::severity_level > lg;
-};
-#endif
+//declares a global logger with a custom initialization
+BOOST_LOG_GLOBAL_LOGGER(logger, logger_t)
