@@ -11,18 +11,20 @@ class AnalysedAudioFile {
         AnalysedAudioFile(fs::path filepath) : filepath(filepath) {}
         void analyse();
 
-        template <typename T>
-        int open_data(const T& data)
+        //template <typename T>
+        int open_data(H5::H5File data)
         {
             try {
-                filegroup = data.createGroup(name());
-                DEBUG << "Created data group for audio file: " <<  filepath.filename().string();
+                data.createGroup("/"+name());
+            
+                LOGDEBUG << "Created data group for audio file: " <<  name();
             }
-            catch(H5::GroupIException e){
+            catch(H5::Exception& e){
                 filegroup = data.openGroup(name());
-                DEBUG << "Loaded data group for audio file: " <<  filepath.filename().string();
+                LOGDEBUG << "Loaded data group for audio file: " <<  name();
             }
             return 0;
+            
         }
     
         int open(const int &mode, const int &format, const int &channels, const int &samplerate)

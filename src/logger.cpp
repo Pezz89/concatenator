@@ -30,10 +30,12 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(logger, logger_t)
             )
     );
 
+    /*
     logging::core::get()->set_filter
     (
         logging::trivial::severity >= logging::trivial::info
     );
+    */
 
     return lg;
 }

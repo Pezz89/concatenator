@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <boost/property_tree/ptree.hpp>
+#include "H5Cpp.h"
 
 using namespace std;
 
@@ -19,6 +20,8 @@ namespace
 }
 
 int main(int argc, char** argv) {
+    // Prevent HDF5 library from printing errors that are handeled in try/catch blocks.
+    H5::Exception::dontPrint();
     //
     // Initialize object to parse arguments supplied by user from command
     // line

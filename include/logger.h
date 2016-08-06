@@ -6,12 +6,12 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup.hpp>
 
-#define TRACE BOOST_LOG_SEV(logger::get(), boost::log::trivial::trace)
-#define DEBUG BOOST_LOG_SEV(logger::get(), boost::log::trivial::debug)
-#define INFO  BOOST_LOG_SEV(logger::get(), boost::log::trivial::info)
-#define WARN  BOOST_LOG_SEV(logger::get(), boost::log::trivial::warning)
-#define ERROR BOOST_LOG_SEV(logger::get(), boost::log::trivial::error)
-#define FATAL BOOST_LOG_SEV(logger::get(), boost::log::trivial::fatal)
+#define LOGTRACE BOOST_LOG_SEV(logger::get(), boost::log::trivial::trace)
+#define LOGDEBUG BOOST_LOG_SEV(logger::get(), boost::log::trivial::debug)
+#define LOGINFO  BOOST_LOG_SEV(logger::get(), boost::log::trivial::info)
+#define LOGWARN  BOOST_LOG_SEV(logger::get(), boost::log::trivial::warning)
+#define LOGERROR BOOST_LOG_SEV(logger::get(), boost::log::trivial::error)
+#define LOGFATAL BOOST_LOG_SEV(logger::get(), boost::log::trivial::fatal)
 
 //Narrow-char thread-safe logger.
 typedef boost::log::sources::severity_logger_mt<boost::log::trivial::severity_level> logger_t;
