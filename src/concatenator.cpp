@@ -1,10 +1,11 @@
 #include <iostream>
-#include "logger.h"
+#include "Logger.h"
 #include "ArgumentParser.h"
 #include "AudioDatabase.h"
 #include <list>
 #include <string>
 #include <boost/property_tree/ptree.hpp>
+#include "H5Cpp.h"
 
 using namespace std;
 
@@ -19,14 +20,9 @@ namespace
 }
 
 int main(int argc, char** argv) {
-    // Initialize a logger object to be used for message handeling throughout
-    // the program
-    Logger log = Logger();
-    /*
-    try 
-    {
-    */
-
+    // Prevent HDF5 library from printing errors that are handeled in try/catch blocks.
+    H5::Exception::dontPrint();
+    //
     // Initialize object to parse arguments supplied by user from command
     // line
     ConcatenatorArgParse argparse = ConcatenatorArgParse();
@@ -45,8 +41,7 @@ int main(int argc, char** argv) {
     // Initialize the source audio database object with arguments provided from the command line.
     AudioDatabase source_db = AudioDatabase(
             argparse.get_source_db(), 
-            analyses, 
-            log
+            analyses
     );
     source_db.load_database(argparse.get_src_audio_dir());
 
@@ -58,18 +53,9 @@ int main(int argc, char** argv) {
             &log
     );
     target_db.load_database(argparse.get_tar_audio_dir());
-    */
 
-    /*
     }
-    catch(std::exception& e) 
-    { 
-        string error("Unhandled Exception reached the top of main:\n");
-        error.append(e.what());
-
-        log.error(error);
-        throw;
-    }   
     */
     return SUCCESS;
+
 }

@@ -1,19 +1,67 @@
 #include <string>
 #include <sndfile.hh>
+#include <boost/filesystem.hpp>
+#include "logger.h"
+#include "H5Cpp.h"
 
-class AudioFile {
-    public:
-        AudioFile(const char * &name, const int &mode=SFM_RDWR, const int &format=0, const int &channels=0, const int &samplerate=0);
-        int open(const int &mode=SFM_READ, const int &format=0, const int &channels=0, const int &samplerate=0);
-    protected:
-        SndfileHandle file;
-        SF_INFO* file_info;
-    private:
-        std::string name;
-};
+namespace fs = boost::filesystem;
 
-class AnalysedAudioFile : public AudioFile {
+
+class AnalysedAudioFile {
     public:
-    private:
-};
+        AnalysedAudioFile(fs::path filepath) : filepath(filepath) {}
+        void analyse();
+
+        template <typename T>
+        int open_data(T& data)
+        {
+            try {
+                data.createGroup(name());
+            
+                LOGDEBUG << "Created data group for audio file: " <<  name();
+            }
+            catch(H5::Exception& e){
+                filegroup = data.openGroup(name());
+                LOGDEBUG << "Loaded data group for audio file: " <<  name();
+            }
+            return 0;
+        }
+
+        template <typename T>
+        int create_analyses(const T& analyses, const bool& reanalyse)
+        {
+            for(auto a : analyses) {
+                if(reanalyse) {
+                }
+            }
+            return 0;
+        }
+    
+        int open(const int &mode, const int &format, const int &channels, const int &samplerate)
+        {
+            switch(mode){
+                case SFM_READ: file = SndfileHandle(filepath.string());
+                case SFM_WRITE: file = SndfileHandle(filepath.string(), SFM_WRITE, format, channels, samplerate);
+                case SFM_RDWR: file = SndfileHandle(filepath.string(), SFM_RDWR, format, channels, samplerate);
+            }
+
+            return 0;
+        }
+
+        int open()
+        {
+            file = SndfileHandle(filepath.string());
+            return 0;
+        }
+
+        std::string name()
+        {
+            return filepath.stem().string();
+        }
+        
+        private:
+            SndfileHandle file;
+            fs::path filepath;
+            H5::Group filegroup;
+    };
 
