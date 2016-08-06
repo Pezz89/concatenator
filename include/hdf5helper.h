@@ -2,7 +2,7 @@
 
 namespace hdf5helper {
     template <typename T>
-    bool exists(T group, std::string name)
+    bool groupExists(T group, std::string name)
     {
         try {
             group.openGroup(name);

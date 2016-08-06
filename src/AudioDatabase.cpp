@@ -45,7 +45,7 @@ void AudioDatabase::validate_analysis_list(vector<string>& analyses)
     }
 }
 
-void AudioDatabase::load_database(fs::path source_dir, bool reanalyse)
+void AudioDatabase::load_database(fs::path source_dir)
 {
     // Make sure the database root directory exists.
     try
@@ -91,6 +91,11 @@ void AudioDatabase::load_database(fs::path source_dir, bool reanalyse)
 
 }
 
+void AudioDatabase::analyse_database(bool reanalyse)
+{
+    
+}
+
 void AudioDatabase::register_data()
 {
     fs::path data_path = database_dirs["data"]/fs::path("data.hdf5");
@@ -116,7 +121,7 @@ void AudioDatabase::register_data()
 
 void AudioDatabase::create_subdirs()
 {
-    array<fs::path, 2> directory_names = {{ 
+    static array<fs::path, 2> directory_names = {{ 
         fs::path("audio"), 
         fs::path("data") 
     }};
@@ -218,12 +223,12 @@ void AudioDatabase::organise_audio(fs::path source_dir, bool symlink)
 void AudioDatabase::register_audio()
 {
     // Clear any previous entries from set.
-    audio_file_set.clear();
+    audio_files.clear();
     for(auto& entry : boost::make_iterator_range(fs::directory_iterator(database_dirs["audio"]), {})) 
     {
         if(validate_filetype(entry.path())) {
             LOGINFO << "Registered audio file: " <<  entry.path().string();
-            audio_file_set.insert(entry.path());
+            audio_files.insert(entry.path());
         }
     }
 }

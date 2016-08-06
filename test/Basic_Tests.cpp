@@ -17,9 +17,22 @@ SCENARIO("HDF5 groups are handled correctly in the AnalysedAudioFile class", "[H
             test_audio.open_data(data_file);
 
             THEN("a group is created using the name of the audio file") {
-                REQUIRE(hdf5helper::exists(data_file, test_audio.name()));
+                REQUIRE(hdf5helper::groupExists(data_file, test_audio.name()));
+
+                AND_WHEN("open_data is called again to read a group that now already exists") {
+                    test_audio.open_data(data_file);
+                    THEN("The group should be loaded without error")
+                    {
+                        //TODO: Add check that group still contains data created in previous test.
+                    }
+                }
             }
-        
         }
-    }
+   }
+   if(fs::exists("./.test_data.hdf5")) {
+       fs::remove("./.test_data.hdf5");
+   }
+   if(fs::exists(".test_audio.wav")) {
+       fs::remove(".test_audio.wav");
+   }
 }

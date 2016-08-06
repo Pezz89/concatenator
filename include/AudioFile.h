@@ -6,16 +6,17 @@
 
 namespace fs = boost::filesystem;
 
+
 class AnalysedAudioFile {
     public:
         AnalysedAudioFile(fs::path filepath) : filepath(filepath) {}
         void analyse();
 
-        //template <typename T>
-        int open_data(H5::H5File data)
+        template <typename T>
+        int open_data(T& data)
         {
             try {
-                data.createGroup("/"+name());
+                data.createGroup(name());
             
                 LOGDEBUG << "Created data group for audio file: " <<  name();
             }
@@ -24,7 +25,16 @@ class AnalysedAudioFile {
                 LOGDEBUG << "Loaded data group for audio file: " <<  name();
             }
             return 0;
-            
+        }
+
+        template <typename T>
+        int create_analyses(const T& analyses, const bool& reanalyse)
+        {
+            for(auto a : analyses) {
+                if(reanalyse) {
+                }
+            }
+            return 0;
         }
     
         int open(const int &mode, const int &format, const int &channels, const int &samplerate)
@@ -48,6 +58,7 @@ class AnalysedAudioFile {
         {
             return filepath.stem().string();
         }
+        
         private:
             SndfileHandle file;
             fs::path filepath;

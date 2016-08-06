@@ -24,13 +24,14 @@ class AudioDatabase {
                 const std::string database_dir, 
                 vector<string>& analyses
         );
-        void load_database(boost::filesystem::path source_dir, bool reanalyse=false);
+        void load_database(boost::filesystem::path source_dir);
+        void analyse_database(bool reanalyse=false);
 
     private:
         boost::filesystem::path database_dir;
         boost::filesystem::path audio_dir;
         // Define a set that stores the locations of audiofiles in the database.
-        std::set<boost::filesystem::path> audio_file_set;
+        std::set<boost::filesystem::path> audio_files;
         std::map<string, boost::filesystem::path> database_dirs;
 
         void validate_analysis_list(vector<string>& analyses);
@@ -44,8 +45,6 @@ class AudioDatabase {
         H5::H5File data_file;
 
         void register_data();
-
-        void analyse_database();
 };
 
 /*! A function that determines whether a string value is found in the container.
