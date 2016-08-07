@@ -1,3 +1,5 @@
+#ifndef AUDIODATABASE_H
+#define AUDIODATABASE_H
 #include <iostream>
 #include <string>
 #include <list>
@@ -94,3 +96,4 @@ std::list<string> check_analyses_valid(Iter iterator, Iter end)
     }
     return invalid;
 }
+#endif

@@ -1,3 +1,6 @@
+#ifndef AUDIOFILE_H
+#define AUDIOFILE_H
+
 #include <string>
 #include <sndfile.hh>
 #include <boost/filesystem.hpp>
@@ -10,8 +13,6 @@ namespace fs = boost::filesystem;
 namespace aa = AudioAnalysis;
 
 namespace AudioFile {
-    static const map<string, aa::valid_analyses> analysis_map = { {"RMS", aa::RMS}, {"F0", aa::F0} };
-    
     class AnalysedAudioFile {
         public:
             AnalysedAudioFile(fs::path filepath) : filepath(filepath) {}
@@ -34,9 +35,13 @@ namespace AudioFile {
             template <typename Iter>
             int analyse(Iter it, Iter end, const bool reanalyse)
             {
+                LOGDEBUG << "Creating analyses for audio file: " <<  name();
+                // Initialize a factory object for creating analysis objects.
+                aa::AnalysisFactory factory = aa::AnalysisFactory(reanalyse);
+
                 for(; it != end; ++it) {
-                    if(reanalyse) {
-                    }
+                    unique_ptr<analysis> a = factory.create(aa::analysis_index_from_string(*it));
+                    a->create_analysis();
                 }
                 return 0;
             }
@@ -69,3 +74,4 @@ namespace AudioFile {
             H5::Group filegroup;
         };
 }
+#endif
