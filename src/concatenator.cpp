@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
             analyses
     );
     source_db.load_database(argparse.get_src_audio_dir());
+    source_db.analyse_database();
 
     /*
     // Initialize the target audio database object with arguments provided from the command line.

@@ -1,6 +1,7 @@
 #include <string>
 #include <list>
 #include "AudioDatabase.h"
+#include "AudioFile.h"
 #include <stdexcept>
 #include <set>
 #include <algorithm>
@@ -16,18 +17,18 @@ using namespace H5;
 
 AudioDatabase::AudioDatabase(
         const string database_dir, 
-        vector<string>& analyses
-    )
+        vector<string> analyses
+    ) : analyses(analyses)
 {
 
     LOGINFO << "Database directory: " << database_dir;
 
     // Remove duplicate strings from vector of analyses.
     std::vector<string>::iterator it;
-    it = std::unique (analyses.begin(), analyses.end());
-    analyses.resize(std::distance(analyses.begin(),it));
+    it = std::unique (this->analyses.begin(), this->analyses.end());
+    analyses.resize(std::distance(this->analyses.begin(),it));
     
-    validate_analysis_list(analyses);
+    validate_analysis_list(this->analyses);
 
     database_dirs.insert({"root", fs::path(database_dir)});
     this->audio_dir = fs::path(audio_dir);
@@ -91,9 +92,14 @@ void AudioDatabase::load_database(fs::path source_dir)
 
 }
 
-void AudioDatabase::analyse_database(bool reanalyse)
+void AudioDatabase::analyse_database(const bool& reanalyse)
 {
-    
+    for(auto afile_path : audio_files)
+    {
+        AnalysedAudioFile afile = AnalysedAudioFile(afile_path);
+        afile.open_data(data_file);
+        afile.analyse(analyses.begin(), analyses.end(), reanalyse);
+    }
 }
 
 void AudioDatabase::register_data()

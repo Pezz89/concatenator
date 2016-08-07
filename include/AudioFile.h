@@ -10,7 +10,6 @@ namespace fs = boost::filesystem;
 class AnalysedAudioFile {
     public:
         AnalysedAudioFile(fs::path filepath) : filepath(filepath) {}
-        void analyse();
 
         template <typename T>
         int open_data(T& data)
@@ -27,10 +26,10 @@ class AnalysedAudioFile {
             return 0;
         }
 
-        template <typename T>
-        int create_analyses(const T& analyses, const bool& reanalyse)
+        template <typename Iter>
+        int analyse(Iter it, Iter end, const bool reanalyse)
         {
-            for(auto a : analyses) {
+            for(; it != end; ++it) {
                 if(reanalyse) {
                 }
             }
