@@ -14,6 +14,7 @@ namespace fs = boost::filesystem;
 
 using namespace std;
 using namespace H5;
+using namespace AudioFile;
 
 AudioDatabase::AudioDatabase(
         const string database_dir, 

@@ -13,6 +13,7 @@ using std::endl;
 using std::list;
 using std::vector;
 
+
 /*!
  * A class that encapsulates a collection of AudioFile objects in order to
  * perform analysis and synthesis operations on batches of audio files.

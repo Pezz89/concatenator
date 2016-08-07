@@ -7,6 +7,7 @@
 #include "AudioFile.h"
 namespace fs = boost::filesystem;
 using namespace H5;
+using namespace AudioFile;
 
 SCENARIO("HDF5 groups are handled correctly in the AnalysedAudioFile class", "[HDF5][AnalysedAudioFile]") {
    GIVEN("An AnalysedAudioFile and a HDF5 file") {
