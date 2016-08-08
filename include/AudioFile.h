@@ -8,25 +8,27 @@
 #include "analyses/analysis.h"
 #include "logger.h"
 #include "H5Cpp.h"
+#include "DataHandler.h"
 
 namespace fs = boost::filesystem;
 namespace aa = AudioAnalysis;
+namespace dh = DataHandling;
+
 
 namespace AudioFile {
     class AnalysedAudioFile {
         public:
             AnalysedAudioFile(fs::path filepath) : filepath(filepath) {}
 
-            template <typename T>
-            int open_data(T& data)
+            int open_data(unique_ptr<dh::DataHandler>& data)
             {
                 try {
-                    data.createGroup(name());
+                    data->create_group(name());
                 
                     LOGDEBUG << "Created data group for audio file: " <<  name();
                 }
                 catch(H5::Exception& e){
-                    filegroup = data.openGroup(name());
+                    filegroup = data->open_group(name());
                     LOGDEBUG << "Loaded data group for audio file: " <<  name();
                 }
                 return 0;
@@ -71,7 +73,7 @@ namespace AudioFile {
         private:
             SndfileHandle file;
             fs::path filepath;
-            H5::Group filegroup;
+            unique_ptr<dh::GroupHandler> filegroup;
         };
 }
 #endif

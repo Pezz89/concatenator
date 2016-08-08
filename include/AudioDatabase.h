@@ -6,7 +6,8 @@
 #include <set>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
-#include <H5Cpp.h>
+#include "DataHandler.h"
+#include <memory>
 #include "logger.h"
 
 using std::string;
@@ -14,6 +15,8 @@ using std::cout;
 using std::endl;
 using std::list;
 using std::vector;
+
+namespace dh = DataHandling;
 
 
 /*!
@@ -46,7 +49,7 @@ class AudioDatabase {
         void register_audio();
 
         // Declare a HDF5 file object to be used for storing analysis data.
-        H5::H5File data_file;
+        std::unique_ptr<dh::DataHandler> data_file;
 
         void register_data();
 };

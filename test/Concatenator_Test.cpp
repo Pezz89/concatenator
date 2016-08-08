@@ -8,7 +8,7 @@ int main( int argc, char* const argv[] )
 {
     // Global setup goes here...
     // Prevent HDF5 library from printing errors that are handeled in try/catch blocks.
-    Exception::dontPrint();
+    //Exception::dontPrint();
 
     int result = Catch::Session().run( argc, argv );
 

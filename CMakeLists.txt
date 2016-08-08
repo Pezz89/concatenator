@@ -49,6 +49,7 @@ set(CONCATENATOR_HEADER_FILES
     ${CONCATENATOR_INCLUDE_DIR}/AudioFile.h
     ${CONCATENATOR_INCLUDE_DIR}/Logger.h
     ${CONCATENATOR_INCLUDE_DIR}/hdf5helper.h
+    ${CONCATENATOR_INCLUDE_DIR}/DataHandler.h
 )
 
 # Declare source files that are only used in the test suite

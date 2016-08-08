@@ -8,13 +8,14 @@
 #include <boost/algorithm/string/join.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
-#include "H5Cpp.h"
+#include "DataHandler.h"
 
 namespace fs = boost::filesystem;
+namespace dh = DataHandling;
 
 using namespace std;
-using namespace H5;
 using namespace AudioFile;
+
 
 AudioDatabase::AudioDatabase(
         const string database_dir, 
@@ -106,21 +107,22 @@ void AudioDatabase::analyse_database(const bool& reanalyse)
 void AudioDatabase::register_data()
 {
     fs::path data_path = database_dirs["data"]/fs::path("data.hdf5");
+
     try
     {
-        data_file = H5File(data_path.string(), H5F_ACC_RDWR);
+        data_file = dh::create_handler<dh::HDF5Handler>(data_path, dh::RDWR);
         LOGINFO << "Reading database data from: " <<  (database_dirs["data"]/fs::path("data.hdf5")).string();
     }
-    catch(FileIException &e)
+    catch(std::runtime_error &e)
     {
-        if(!fs::exists(data_path.string()))
+        if(!fs::exists(data_path))
         {
-            data_file = H5File(data_path.string(), H5F_ACC_TRUNC);
+            data_file = dh::create_handler<dh::HDF5Handler>(data_path, dh::TRUNC);
             LOGINFO << "Creating new database file at: " <<  (database_dirs["data"]/fs::path("data.hdf5")).string();
         }
         else
         {
-            LOGINFO << "Data file exists but cannot be read: " <<  data_path.string();
+            LOGERROR << "Data file exists but cannot be read: " <<  data_path.string();
             throw;
         }
     }
