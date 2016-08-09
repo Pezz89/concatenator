@@ -1,6 +1,6 @@
 #ifndef F0_H
 #define F0_H
-#include "analysis.h"
+#include "analysis_base.h"
 #include "logger.h"
 
 class f0 : public analysis 

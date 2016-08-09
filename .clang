@@ -1,1 +1,1 @@
--I ./include -I ./external/Catch/include/ -std=c++14
+-I ./include/ -I ./include/analyses/ -I ./external/Catch/include/ -std=c++14
