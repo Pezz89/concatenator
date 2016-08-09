@@ -34,6 +34,8 @@ set(GLOBAL_SOURCE_FILES
     ${CONCATENATOR_SOURCE_DIR}/AudioDatabase.cpp
     ${CONCATENATOR_SOURCE_DIR}/Logger.cpp
     ${CONCATENATOR_SOURCE_DIR}/ArgumentParser.cpp
+    ${CONCATENATOR_SOURCE_DIR}/analyses/f0.cpp
+    ${CONCATENATOR_SOURCE_DIR}/analyses/rms.cpp
 )
 
 # Declare source files that are only used in the main program
@@ -49,6 +51,10 @@ set(CONCATENATOR_HEADER_FILES
     ${CONCATENATOR_INCLUDE_DIR}/AudioFile.h
     ${CONCATENATOR_INCLUDE_DIR}/Logger.h
     ${CONCATENATOR_INCLUDE_DIR}/hdf5helper.h
+    ${CONCATENATOR_INCLUDE_DIR}/analyses/rms.h
+    ${CONCATENATOR_INCLUDE_DIR}/analyses/f0.h
+    ${CONCATENATOR_INCLUDE_DIR}/analyses/analysis.h
+    ${CONCATENATOR_INCLUDE_DIR}/analyses/analysis_base.h
 )
 
 # Declare source files that are only used in the test suite
