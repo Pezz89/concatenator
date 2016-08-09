@@ -49,9 +49,15 @@ namespace AudioFile {
             int open(const int &mode, const int &format, const int &channels, const int &samplerate)
             {
                 switch(mode){
-                    case SFM_READ: file = SndfileHandle(filepath.string());
-                    case SFM_WRITE: file = SndfileHandle(filepath.string(), SFM_WRITE, format, channels, samplerate);
-                    case SFM_RDWR: file = SndfileHandle(filepath.string(), SFM_RDWR, format, channels, samplerate);
+                    case SFM_READ: 
+                        file = SndfileHandle(filepath.string());
+                        break;
+                    case SFM_WRITE: 
+                        file = SndfileHandle(filepath.string(), SFM_WRITE, format, channels, samplerate);
+                        break;
+                    case SFM_RDWR: 
+                        file = SndfileHandle(filepath.string(), SFM_RDWR, format, channels, samplerate);
+                        break;
                 }
 
                 return 0;
