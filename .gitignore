@@ -1,3 +1,5 @@
+.DS_Store
+bin/
 # Compiled Object files
 *.slo
 *.lo
@@ -27,6 +29,9 @@
 *.exe
 *.out
 *.app
+
+# Log files
+*.log
 
 external/
 CMakeFiles/

@@ -29,12 +29,20 @@ set(CONCATENATOR_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(CONCATENATOR_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(CONCATENATOR_TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 
-set(CONCATENATOR_SOURCE_FILES
-    ${CONCATENATOR_SOURCE_DIR}/Concatenator.cpp
+# Declare source files that are used in both the tests and the main program.
+set(GLOBAL_SOURCE_FILES
     ${CONCATENATOR_SOURCE_DIR}/AudioDatabase.cpp
     ${CONCATENATOR_SOURCE_DIR}/Logger.cpp
     ${CONCATENATOR_SOURCE_DIR}/ArgumentParser.cpp
 )
+
+# Declare source files that are only used in the main program
+set(CONCATENATOR_SOURCE_FILES
+    ${CONCATENATOR_SOURCE_DIR}/Concatenator.cpp
+    ${GLOBAL_SOURCE_FILES}
+)
+
+# Declare all header files
 set(CONCATENATOR_HEADER_FILES
     ${CONCATENATOR_INCLUDE_DIR}/ArgumentParser.h
     ${CONCATENATOR_INCLUDE_DIR}/AudioDatabase.h
@@ -42,12 +50,12 @@ set(CONCATENATOR_HEADER_FILES
     ${CONCATENATOR_INCLUDE_DIR}/Logger.h
     ${CONCATENATOR_INCLUDE_DIR}/hdf5helper.h
 )
+
+# Declare source files that are only used in the test suite
 set(CONCATENATOR_TEST_SOURCES
     ${CONCATENATOR_TEST_DIR}/Concatenator_Test.cpp
     ${CONCATENATOR_TEST_DIR}/Basic_Tests.cpp
-    ${CONCATENATOR_SOURCE_DIR}/AudioDatabase.cpp
-    ${CONCATENATOR_SOURCE_DIR}/Logger.cpp
-    ${CONCATENATOR_SOURCE_DIR}/ArgumentParser.cpp
+    ${GLOBAL_SOURCE_FILES}
 )
 
 include_directories(${CONCATENATOR_INCLUDE_DIR})
