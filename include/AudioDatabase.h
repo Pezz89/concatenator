@@ -1,3 +1,5 @@
+#ifndef AUDIODATABASE_H
+#define AUDIODATABASE_H
 #include <iostream>
 #include <string>
 #include <list>
@@ -13,6 +15,7 @@ using std::endl;
 using std::list;
 using std::vector;
 
+
 /*!
  * A class that encapsulates a collection of AudioFile objects in order to
  * perform analysis and synthesis operations on batches of audio files.
@@ -22,16 +25,17 @@ class AudioDatabase {
     public:
         AudioDatabase(
                 const std::string database_dir, 
-                vector<string>& analyses
+                vector<string> analyses
         );
         void load_database(boost::filesystem::path source_dir);
-        void analyse_database(bool reanalyse=false);
+        void analyse_database(const bool& reanalyse=false);
 
     private:
         boost::filesystem::path database_dir;
         boost::filesystem::path audio_dir;
         // Define a set that stores the locations of audiofiles in the database.
         std::set<boost::filesystem::path> audio_files;
+        std::vector<std::string> analyses;
         std::map<string, boost::filesystem::path> database_dirs;
 
         void validate_analysis_list(vector<string>& analyses);
@@ -92,3 +96,4 @@ std::list<string> check_analyses_valid(Iter iterator, Iter end)
     }
     return invalid;
 }
+#endif
